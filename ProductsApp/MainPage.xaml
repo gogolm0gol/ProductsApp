@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ProductsApp.MainPage"
+             BackgroundColor="#FFF0F6"
+             Title="Товари">
+
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="#4A1530" />
+        </Style>
+        <Style TargetType="Entry">
+            <Setter Property="TextColor" Value="#4A1530" />
+            <Setter Property="PlaceholderColor" Value="#B77A97" />
+            <Setter Property="WidthRequest" Value="190" />
+            <Setter Property="Margin" Value="4" />
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="TextColor" Value="#4A1530" />
+            <Setter Property="WidthRequest" Value="190" />
+            <Setter Property="Margin" Value="4" />
+        </Style>
+        <Style TargetType="Picker">
+            <Setter Property="TextColor" Value="#4A1530" />
+            <Setter Property="TitleColor" Value="#B77A97" />
+            <Setter Property="WidthRequest" Value="190" />
+            <Setter Property="Margin" Value="4" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#D6336C" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="CornerRadius" Value="18" />
+            <Setter Property="Padding" Value="28,0" />
+            <Setter Property="Margin" Value="4" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="16" RowSpacing="8">
+
+        <Border Grid.Row="0" Stroke="#F8D0E0" StrokeThickness="2"
+                BackgroundColor="White" Padding="10"
+                StrokeShape="RoundRectangle 16">
+            <VerticalStackLayout>
+                <FlexLayout Wrap="Wrap">
+                    <Picker x:Name="pickType" Title="Тип товару"
+                            SelectedIndexChanged="OnTypeChanged">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Продукт</x:String>
+                                <x:String>Книга</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                    <Entry x:Name="entName" Placeholder="Назва" />
+                    <Entry x:Name="entPrice" Placeholder="Ціна, грн" Keyboard="Numeric" />
+                    <Entry x:Name="entCountry" Placeholder="Країна походження" />
+                    <VerticalStackLayout>
+                        <Label Text="Дата пакування" FontSize="12" Margin="8,0,0,0" />
+                        <DatePicker x:Name="dpPack" />
+                    </VerticalStackLayout>
+                    <Entry x:Name="entDescription" Placeholder="Опис" />
+                </FlexLayout>
+
+                <FlexLayout x:Name="foodPanel" Wrap="Wrap">
+                    <VerticalStackLayout>
+                        <Label Text="Термін придатності" FontSize="12" Margin="8,0,0,0" />
+                        <DatePicker x:Name="dpExpiry" />
+                    </VerticalStackLayout>
+                    <Entry x:Name="entQuantity" Placeholder="Кількість" Keyboard="Numeric" />
+                    <Entry x:Name="entUnit" Placeholder="Одиниця виміру (кг, л, шт)" />
+                </FlexLayout>
+
+                <FlexLayout x:Name="bookPanel" Wrap="Wrap" IsVisible="False">
+                    <Entry x:Name="entPages" Placeholder="Кількість сторінок" Keyboard="Numeric" />
+                    <Entry x:Name="entPublisher" Placeholder="Видавництво" />
+                    <Entry x:Name="entAuthors" Placeholder="Автори (через кому)" WidthRequest="300" />
+                </FlexLayout>
+            </VerticalStackLayout>
+        </Border>
+
+        <HorizontalStackLayout Grid.Row="1">
+            <Button Text="Додати товар" Clicked="OnAddClicked" />
+            <Button Text="Видалити вибраний" BackgroundColor="#A61E4D" Clicked="OnDeleteClicked" />
+        </HorizontalStackLayout>
+
+        <Grid Grid.Row="2" ColumnDefinitions="100,*,90,110,110,2*"
+              BackgroundColor="#FCC2D7" Padding="8,8" ColumnSpacing="4">
+            <Label Grid.Column="0" Text="Тип" FontAttributes="Bold" />
+            <Label Grid.Column="1" Text="Назва" FontAttributes="Bold" />
+            <Label Grid.Column="2" Text="Ціна" FontAttributes="Bold" />
+            <Label Grid.Column="3" Text="Країна" FontAttributes="Bold" />
+            <Label Grid.Column="4" Text="Дата пакування" FontAttributes="Bold" />
+            <Label Grid.Column="5" Text="Додатково" FontAttributes="Bold" />
+        </Grid>
+
+        <CollectionView x:Name="productsList" Grid.Row="3" SelectionMode="Single">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="100,*,90,110,110,2*" Padding="8,10" ColumnSpacing="4">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup Name="CommonStates">
+                                <VisualState Name="Normal">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="White" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="#FFC9DE" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Label Grid.Column="0" Text="{Binding TypeName}" />
+                        <Label Grid.Column="1" Text="{Binding Name}" />
+                        <Label Grid.Column="2" Text="{Binding Price, StringFormat='{0:F2} грн'}" />
+                        <Label Grid.Column="3" Text="{Binding Country}" />
+                        <Label Grid.Column="4" Text="{Binding PackDate, StringFormat='{0:dd.MM.yyyy}'}" />
+                        <Label Grid.Column="5" Text="{Binding Details}" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
